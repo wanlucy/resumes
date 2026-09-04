@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIMEILING PROFILE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #f7f8fa;
+            font-family: "Microsoft Yahei", sands serif;
+        }
+        .page-wrap {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f7f8fa;
+        }
+        .page-header {
+            padding: 12px 15px 6px;
+            text-align: center;
+        }
+        .title-text {
+            font-size: 17px;
+            font-weight: 500;
+            color: #222;
+        }
+        /* ==========顶部标签栏========== */
+        .tab-header {
+            display: flex;
+            justify-content: center;
+            margin-bottom:20px;
+            gap: 8px;
+            padding: 0 10px 10px;
+        }
+        .tab-item {
+            padding:8px 20px;
+            border-radius: 8px;
+            font-size:14px;
+            cursor: pointer;
+            background:#eeeeee;
+            color:#666;
+            border: none;
+        }
+        .tab-item.active {
+            background:#c8102e;
+            color:#ffffff;
+        }
+        /* ==========内容面板，默认隐藏========== */
+        .tab-panel {
+            display: none;
+        }
+        .tab-panel.show {
+            display:block;
+        }
+        .scroll-content {
+            padding: 0 12px;
+            overflow-y: auto;
+        }
+
+        /* 封面红色头部卡片 */
+        .cover-card {
+            background: linear-gradient(135deg,#c8102e,#a80e27);
+            border-radius: 12px;
+            padding: 20px 15px;
+            margin-bottom:18px;
+        }
+        .avatar-box {
+            display:flex;
+            justify-content:center;
+        }
+        .avatar-img {
+            width:110px;
+            height:130px;
+            border-radius:8px;
+            background:#fff;
+            object-fit: cover;
+        }
+        .eng-title {
+            text-align:center;
+            color:#f2d299;
+            font-size:13px;
+            margin:12px 0 6px;
+            letter-spacing:1px;
+        }
+        .cn-name {
+            text-align:center;
+            color:#fff;
+            font-size:24px;
+            font-weight:bold;
+            margin-bottom:10px;
+        }
+        .cover-desc {
+            color:#fff;
+            font-size:15px;
+            text-align:center;
+            line-height:1.7;
+        }
+        .cover-subtext {
+            color:#fff;
+            font-size:14px;
+            line-height:1.7;
+            text-align:center;
+            margin:12px 0;
+        }
+        .tag-row {
+            display:flex;
+            flex-wrap:wrap;
+            justify-content:center;
+            gap:8px;
+        }
+        .tag-item {
+            background:rgba(255,255,255,0.22);
+            color:#fff;
+            font-size:13px;
+            padding:6px 14px;
+            border-radius:20px;
+        }
+
+        /* 通用板块标题 */
+        .section-wrap {
+            margin-bottom:20px;
+        }
+        .section-title {
+            display:flex;
+            align-items:center;
+            position:relative;
+            margin-bottom:12px;
+        }
+        .title-deco {
+            width:4px;
+            height:32px;
+            background:linear-gradient(#c8102e,#f2bc64);
+            border-radius:2px;
+            margin-right:8px;
+        }
+        .title-cn {
+            font-size:19px;
+            font-weight:bold;
+            color:#111;
+        }
+        .title-en {
+            font-size:14px;
+            color:#999;
+            margin-left:8px;
+            letter-spacing:1px;
+        }
+        .tag-float {
+            position:absolute;
+            right:0;
+            background:#ffe8ec;
+            color:#c8102e;
+            font-size:12px;
+            padding:4px 8px;
+            border-radius:6px;
+        }
+
+        /* 基本信息卡片 */
+        .info-card {
+            background:#ffffff;
+            border-radius:10px;
+            padding:15px;
+        }
+        .info-item {
+            margin-bottom:12px;
+        }
+        .info-label {
+            font-size:13px;
+            color:#888;
+            display:block;
+            margin-bottom:4px;
+        }
+        .info-val {
+            font-size:15px;
+            color:#222;
+            font-weight:500;
+        }
+
+        /* 个人简介文本卡片 */
+        .text-card {
+            background:#ffffff;
+            border-radius:10px;
+            padding:16px;
+            border-left:4px solid #c8102e;
+        }
+        .text-card-content {
+            font-size:14.5px;
+            line-height:1.8;
+            color:#222;
+        }
+
+        /* 个人优势 */
+        .adv-item {
+            background:#fff;
+            border-radius:10px;
+            padding:15px;
+            margin-bottom:12px;
+            position:relative;
+            overflow:hidden;
+        }
+        .adv-01 {border-top:4px solid #e6bc78;}
+        .adv-02 {border-top:4px solid #e6bc78;}
+        .adv-03 {border-top:4px solid #e6bc78;}
+        .adv-04 {border-top:4px solid #9168d8;}
+        .adv-num {
+            position:absolute;
+            right:10px;
+            top:10px;
+            font-size:26px;
+            color:#e8e2d2;
+            font-weight:bold;
+        }
+        .adv-title {
+            font-size:16px;
+            font-weight:bold;
+            margin-bottom:6px;
+        }
+        .adv-desc {
+            font-size:14px;
+            line-height:1.7;
+            color:#444;
+        }
+
+        /* 职务卡片 */
+        .job-card {
+            background:#ffffff;
+            border-radius:10px;
+            padding:15px;
+            margin-bottom:12px;
+            border-top:3px solid #d4af5c;
+        }
+        .job-icon-box {
+            width:36px;
+            height:36px;
+            border-radius:8px;
+            background:#c8102e;
+            color:#fff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:16px;
+            margin-bottom:8px;
+        }
+        .job-title {
+            font-size:16px;
+            font-weight:bold;
+            margin-bottom:6px;
+        }
+        .job-desc {
+            font-size:14px;
+            line-height:1.7;
+            color:#444;
+        }
+
+        /* 获奖荣誉 */
+        .honor-card {
+            background:#fffbf0;
+            border-radius:10px;
+            padding:15px;
+            margin-bottom:12px;
+            border:1px solid #f3e8c8;
+        }
+        .honor-tag {
+            display:inline-block;
+            background:#f3e8c8;
+            color:#946c20;
+            font-size:12px;
+            padding:3px 8px;
+            border-radius:15px;
+            margin-bottom:8px;
+        }
+        .honor-title {
+            font-size:17px;
+            font-weight:bold;
+            color:#9c1024;
+            margin-bottom:5px;
+        }
+        .honor-time {
+            font-size:13px;
+            color:#b48b2e;
+            margin-bottom:6px;
+        }
+        .honor-desc {
+            font-size:14px;
+            line-height:1.7;
+            color:#444;
+        }
+
+        /* 实践时间线 */
+        .stat-gold {
+            background:#c99c28;
+            color:#fff;
+            border-radius:8px;
+            padding:16px 14px;
+            font-size:22px;
+            font-weight:bold;
+            margin-bottom:12px;
+        }
+        .stat-sub {
+            font-size:14px;
+            font-weight:normal;
+            margin-left:6px;
+        }
+        .timeline-list {
+            padding-left:10px;
+            border-left:2px solid #c8102e;
+        }
+        .timeline-item {
+            position:relative;
+            margin-bottom:14px;
+        }
+        .timeline-dot {
+            width:12px;
+            height:12px;
+            border-radius:50%;
+            background:#c8102e;
+            position:absolute;
+            left:-17px;
+            top:14px;
+            border:2px solid #fff;
+        }
+        .timeline-card {
+            background:#fff;
+            border-radius:8px;
+            padding:14px;
+        }
+        .timeline-title {
+            font-size:16px;
+            font-weight:bold;
+            margin-bottom:6px;
+        }
+        .timeline-desc {
+            font-size:14px;
+            line-height:1.7;
+            color:#444;
+        }
+
+        /* 艺术作品 */
+        .art-card {
+            background:#ffffff;
+            border-radius:10px;
+            padding:15px;
+            margin-bottom:12px;
+            border-left:3px solid #d4af5c;
+        }
+        .art-title {
+            font-size:16px;
+            font-weight:bold;
+            color:#9c1024;
+            margin-bottom:7px;
+        }
+        .art-desc {
+            font-size:14px;
+            line-height:1.7;
+            color:#444;
+            margin-bottom:8px;
+        }
+        .art-tag {
+            display:inline-block;
+            background:#f8e9b8;
+            color:#805c14;
+            font-size:12px;
+            padding:4px 9px;
+            border-radius:5px;
+        }
+
+        /* 青春寄语 */
+        .quote-card {
+            background:#222834;
+            border-radius:10px;
+            padding:18px 15px;
+            color:#fff;
+        }
+        .quote-title {
+            font-size:17px;
+            font-weight:bold;
+            margin-bottom:12px;
+        }
+        .quote-text {
+            font-size:14px;
+            line-height:1.8;
+            opacity:0.92;
+        }
+        .quote-author {
+            margin-top:15px;
+            font-size:12px;
+            opacity:0.7;
+        }
+        .bottom-space{
+            height:60px;
+        }
+
+        /* =========竞赛荣誉模块========= */
+        .award-count-card{
+            background: linear-gradient(135deg,#c8102e,#990c23);
+            color:white;
+            border-radius:24px;
+            padding:32px 24px;
+            margin-bottom:28px;
+        }
+        .count-row{
+            display:grid;
+            grid-template-columns:1fr 1fr 1fr;
+            margin-top:24px;
+            gap:16px;
+        }
+        .count-num{
+            font-size:48px;
+            color:#ffdd70;
+            font-weight:bold;
+        }
+
+        .award-card{
+            background:#fff9e6;
+            border-radius:20px;
+            padding:24px;
+            margin-bottom:20px;
+            border:1px solid #f3e2b0;
+        }
+        .card-tag{
+            display:inline-block;
+            padding:4px 12px;
+            border-radius:30px;
+            font-size:14px;
+            margin-bottom:12px;
+        }
+        .tag-collective{
+            background:#d7e8fc;
+            color:#1b5499;
+        }
+        .tag-person{
+            background:#fce4ec;
+            color:#b82654;
+        }
+        .tag-match{
+            background:#fff2cc;
+            color:#b47c00;
+        }
+        .award-card h3{
+            color:#990c23;
+            font-size:24px;
+            margin-bottom:8px;
+        }
+        .award-subtitle{
+            color:#b47c00;
+            font-size:16px;
+            margin-bottom:14px;
+        }
+        .award-desc{
+            color:#444444;
+            line-height:1.6;
+            margin-bottom:16px;
+        }
+        .view-cert{
+            color:#c8102e;
+            font-weight:bold;
+            cursor:pointer;
+        }
+
+        /* =========弹窗：证书详情弹窗 ========= */
+        .cert-modal{
+            position:fixed;
+            left:0;
+            top:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.65);
+            display:none;
+            z-index: 999;
+            overflow-y:auto;
+            padding:20px;
+        }
+        .cert-modal.show{
+            display:block;
+        }
+        .modal-inner{
+            background:white;
+            max-width:600px;
+            margin:30px auto;
+            border-radius:16px;
+            padding:24px;
+        }
+        .info-row{
+            display:flex;
+            padding:14px 0;
+            border-bottom:1px dashed #dddddd;
+        }
+        .info-label{
+            width:120px;
+            color:#888888;
+        }
+        .info-value{
+            flex:1;
+            font-weight:500;
+        }
+        .desc-block{
+            background-color:#fff9e6;
+            border-left:4px solid #d4af37;
+            border-radius:10px;
+            padding:20px;
+            margin:20px 0;
+            font-size:16px;
+            line-height:1.7;
+            color:#444;
+        }
+        .modal-inner img{
+            width:100%;
+            border-radius:10px;
+            margin-top:16px;
+        }
+        .close-btn{
+            padding:8px 16px;
+            background:#c8102e;
+            color:white;
+            border:none;
+            border-radius:8px;
+            margin-top:18px;
+            cursor:pointer;
+        }
+        
+/* 技能模块样式 */
+.skill-banner-card{
+    background:linear-gradient(135deg,#b81025,#dd3045);
+    color:#fff;
+    border-radius:20px;
+    padding:30px 24px;
+    margin-bottom:30px;
+}
+.banner-tag{
+    background:rgba(255,255,255,0.2);
+    display:inline-block;
+    padding:6px 16px;
+    border-radius:30px;
+    font-size:15px;
+    margin-bottom:16px;
+}
+.skill-banner-card h2{
+    font-size:34px;
+    margin-bottom:12px;
+}
+.skill-banner-card p{
+    opacity:0.92;
+    line-height:1.7;
+    margin-bottom:24px;
+}
+.skill-stat-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+.stat-item .num{
+    font-size:46px;
+    font-weight:bold;
+    color:#ffd770;
+}
+.stat-item .text{
+    font-size:16px;
+    opacity:0.9;
+    margin-left:6px;
+}
+
+.list-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+.list-header h2 small{
+    font-size:16px;
+    color:#999;
+    font-weight:normal;
+}
+.tip-tag{
+    background:#ffe9ec;
+    color:#c42b42;
+    padding:8px 14px;
+    border-radius:12px;
+}
+.skill-group{
+    margin-bottom:36px;
+}
+.group-title{
+    font-size:22px;
+    margin-bottom:18px;
+}
+.group-title.red{color:#b41c30;}
+.group-title.gold{color:#c49500;}
+.group-title.purple{color:#8039a8;}
+
+.skill-card{
+    background:#ffffff;
+    border-radius:16px;
+    padding:20px;
+    display:flex;
+    gap:16px;
+    margin-bottom:16px;
+    box-shadow:0 2px 10px #0000000f;
+    cursor:pointer;
+}
+.card-icon{
+    width:64px;
+    height:64px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    flex-shrink:0;
+}
+.card-icon.red{background:#b41c30;color:#fff;}
+.card-icon.gold{background:#d4aa28;color:#fff;}
+.card-icon.purple{background:#8039a8;color:#fff;}
+.card-content{
+    flex:1;
+}
+.card-content h4{
+    font-size:22px;
+    margin-bottom:8px;
+}
+.card-content p{
+    font-size:15px;
+    color:#444;
+    line-height:1.6;
+    margin-bottom:10px;
+}
+.level-tag{
+    display:inline-block;
+    padding:4px 12px;
+    border-radius:8px;
+    font-size:14px;
+}
+.tag-red{background:#ffe9ec;color:#b41c30;}
+.tag-gold{background:#fff6d8;color:#a27c00;}
+.tag-purple{background:#f3e8fc;color:#782fa0;}
+
+/* 详情页样式 */
+.back-btn{
+    color:#b41c30;
+    font-size:17px;
+    margin-bottom:20px;
+    cursor:pointer;
+}
+.skill-detail-wrap{
+    padding:10px 0;
+}
+.detail-inner{
+    background:#fff;
+    border-radius:18px;
+    padding:24px;
+}
+.detail-icon{
+    width:80px;
+    height:80px;
+    border-radius:16px;
+    font-size:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:22px;
+}
+.detail-row{
+    margin-bottom:16px;
+}
+.detail-row label{
+    font-size:18px;
+    color:#333;
+    display:block;
+    margin-bottom:4px;
+}
+.detail-title{
+    font-size:22px;
+    margin:28px 0 14px;
+}
+.point-item{
+    background:#f7f8fc;
+    border-left:4px solid #d4aa28;
+    padding:14px 16px;
+    border-radius:10px;
+    margin-bottom:12px;
+    font-size:17px;
+}
+/* 四宫格图片布局 和截图样式匹配 */
+.practice-img-box{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap:12px;
+}
+.practice-img-box img{
+    width:100%;
+    border-radius:10px;
+    object-fit:cover;
+}
+</style>
+    </style>
+</head>
+<body>
+    <div class="page-wrap">
+        <!-- 顶部头部标题 -->
+        <div class="page-header">
+            <div class="title-text">LIMEILING PROFILE</div>
+        </div>
+        <!-- 顶部标签切换按钮 -->
+        <div class="tab-header">
+            <button class="tab-item active" data-tab="tab1">个人简介</button>
+            <button class="tab-item" data-tab="tab2">技能能力</button>
+            <button class="tab-item" data-tab="tab3">竞赛荣誉</button>
+        </div>
+
+        <div class="scroll-content">
+            <!-- 面板1：个人简介【全部原有内容完整保留】 -->
+            <div class="tab-panel show" id="tab1">
+                <!-- 头部红色封面卡片 -->
+                <div class="cover-card">
+                    <div class="avatar-box">
+                        <img class="avatar-img" src="avatar.jpg" alt="头像">
+                    </div>
+                    <div class="eng-title">LI MEILING</div>
+                    <div class="cn-name">李美灵</div>
+                    <div class="cover-desc">
+                        武汉商学院 · 人工智能与大数据学院 · 2025级软件工程
+                    </div>
+                    <div class="cover-subtext">
+                        一名来自湖北省潜江市的开朗女孩，有着极强的奉献精神、上进心、责任心，沉稳细心、积极向上
+                    </div>
+                    <div class="tag-row">
+                        <div class="tag-item">共青团员</div>
+                        <div class="tag-item">班长·团支书</div>
+                        <div class="tag-item">主题班会讲师</div>
+                    </div>
+                </div>
+
+                <!-- 基本信息模块 -->
+                <div class="section-wrap">
+                    <div class="section-title">
+                        <div class="title-deco"></div>
+                        <span class="title-cn">基本信息</span>
+                        <span class="title-en">BASIC INFO</span>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-item">
+                            <span class="info-label">所在学校</span>
+                            <span class="info-val">武汉商学院</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">所在学院</span>
+                            <span class="info-val">人工智能与大数据学院</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">专业年级</span>
+                            <span class="info-val">软件工程 · 2025级</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">联系电话</span>
+                            <span class="info-val">15342919745</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">电子邮箱</span>
+                            <span class="info-val">3190663506@qq.com</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">出生年月</span>
+                            <span class="info-val">2007年1月</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">籍　贯</span>
+                            <span class="info-val">湖北省潜江市</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">民族 / 政治面貌</span>
+                            <span class="info-val">汉族 · 共青团员</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 个人简介模块 -->
+                <div class="section-wrap">
+                    <div class="section-title">
+                        <div class="title-deco"></div>
+                        <span class="title-cn">个人简介</span>
+                        <span class="title-en">PROFILE</span>
+                    </div>
+                    <div class="text-card">
+                        <span class="text-card-content">
+李美灵，女，2007年1月出生，汉族，共青团员，籍贯湖北省潜江市，现就读于武汉商学院人工智能与大数据学院软件工程专业（2025级）。性格沉稳、擅长协作，具备优秀的组织能力、语言表达能力与随机应变能力，能够凝聚团队力量、使成员各司其职。在校期间担任班长兼团支书、学院社团宣传等多项职务，长期投身志愿服务与社会实践，具备扎实的团务工作基础与突出的组织协调、文字宣传、沟通执行与应急处理能力。
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 个人优势模块 -->
+                <div class="section-wrap">
+                    <div class="section-title">
+                        <div class="title-deco"></div>
+                        <span class="title-cn">个人优势</span>
+                        <span class="title-en">ADVANTAGES</span>
+                    </div>
+                    <div class="advantage-list">
+                        <div class="adv-item adv-01">
+                            <div class="adv-num">01</div>
+                            <div class="adv-body">
+                                <div class="adv-title">性格优势</div>
+                                <div class="adv-desc">性格沉稳细心，擅长沟通解决问题，能在不同场合活跃气氛、带动大家情绪。</div>
+                            </div>
+                        </div>
+                        <div class="adv-item adv-02">
+                            <div class="adv-num">02</div>
+                            <div class="adv-body">
+                                <div class="adv-title">应变优势</div>
+                                <div class="adv-desc">具有超强的随机应变能力，能够从容面对各种场合、精准应对各种突发情况。</div>
+                            </div>
+                        </div>
+                        <div class="adv-item adv-03">
+                            <div class="adv-num">03</div>
+                            <div class="adv-body">
+                                <div class="adv-title">问题解决能力</div>
+                                <div class="adv-desc">拥有严密的逻辑性，能避开情绪精准发现根本性问题，规划出最优解决方案。</div>
+                            </div>
+                        </div>
+                        <div class="adv-item adv-04">
+                            <div class="adv-num">04</div>
+                            <div class="adv-body">
+                                <div class="adv-title">团结力 · 凝聚力</div>
+                                <div class="adv-desc">具有极强的集体意识和责任心，团结一切能够团结的力量，凝聚团魂。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 担任过职务 -->
+                <div class="section-wrap">
+                    <div class="section-title">
+                        <div class="title-deco"></div>
+                        <span class="title-cn">担任过职务</span>
+                        <span class="title-en">EXPERIENCES</span>
+                        <div class="tag-float">重点突出</div>
+                    </div>
+                    <div class="job-list">
+                        <div class="job-card">
+                            <div class="job-icon-box">①</div>
+                            <div class="job-title">班长 兼 团支书</div>
+                            <div class="job-desc">明白责任心的重要性，凝聚同学、团结一切能够团结的力量，历练了与不同性格人的交往交流能力和组织能力，带领班级获评"优秀班集体"。</div>
+                        </div>
+                        <div class="job-card">
+                            <div class="job-icon-box">②</div>
+                            <div class="job-title">新能源与低碳产业学院社团交流活动组长</div>
+                            <div class="job-desc">主席的职位承载的不仅是某一方面能力，更是综合能力，学会将各方面能力结合运用，心境得以历练，成为不畏压力、更加坚韧的人。</div>
+                        </div>
+                        <div class="job-card">
+                            <div class="job-icon-box">③</div>
+                            <div class="job-title">校青年志愿者协会</div>
+                            <div class="job-desc">精进统筹能力与策划书写能力，深刻明白"奉献友爱互助进步"的志愿者精神与团结能力，坚定留在青协大家庭的决心。</div>
+                        </div>
+                        <div class="job-card">
+                            <div class="job-icon-box">④</div>
+                            <div class="job-title">班级主题班会讲师团</div>
+                            <div class="job-desc">从一个开朗健谈的人，变成能够将故事润色、变得生动形象、深入人心的人，明白表达和语言的艺术，锻炼了叙事能力。</div>
+                        </div>
+                        <div class="job-card">
+                            <div class="job-icon-box">⑤</div>
+                            <div class="job-title">学院新媒体宣传工作组</div>
+                            <div class="job-desc">拍摄、导演能力，逻辑思维与情节设计连贯能力得以提升，精进公众号发表能力和官方文字编辑能力。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 获奖荣誉 -->
+                <div class="section-wrap">
+                    <div class="section-title">
+                        <div class="title-deco"></div>
+                        <span class="title-cn">获奖荣誉</span>
+                        <span class="title-en">HONORS & AWARDS</span>
+                    </div>
+                    <div class="honor-list">
+                        <div class="honor-card">
+                            <div class="honor-tag">★ 集体荣誉</div>
+                            <div class="honor-title">"优秀班集体"</div>
+                            <div class="honor-time">2025—2026 学年度</div>
+                            <div class="honor-desc">担任班长兼团支书，带领班级取得"优秀班集体"奖项，凝聚同学、落实任务，班级与团支部建设成效显著。</div>
+                        </div>
+                        <div class="honor-card">
+                            <div class="honor-tag">★ 集体荣誉</div>
+                            <div class="honor-title">杰出防艾志愿服务集体</div>
+                            <div class="honor-time">校青年志愿者协会</div>
+                            <div class="honor-desc">所在集体获评"杰出防艾志愿服务集体"。</div>
+                        </div>
+                        <div class="honor-card">
+                            <div class="honor-tag">★ 个人荣誉</div>
+                            <div class="honor-title">"公益达人"</div>
+                            <div class="honor-time">"返家乡"社会实践活动</div>
+                            <div class="honor-desc">寒假期间参与"返家乡"社会实践活动，服务扎实、表现优异，获评"优秀志愿者"并获单位好评。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 志愿服务与社会实践 -->
+                <div class="section-wrap">
+                    <div class="section-title">
+                        <div class="title-deco"></div>
+                        <span class="title-cn">志愿服务与社会实践</span>
+                        <span class="title-en">VOLUNTEER & PRACTICE</span>
+                    </div>
+                    <div class="stat-gold">6+ 项 <span class="stat-sub">志愿服务与社会实践经历</span></div>
+                    <div class="timeline-list">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-card">
+                                <div class="timeline-title">基础服务类志愿保障</div>
+                                <div class="timeline-desc">大学期间参与社区生活节、社团嘉年华、校园招聘会等志愿保障工作，践行服务初心。</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-card">
+                                <div class="timeline-title">第36期课外实践活动</div>
+                                <div class="timeline-desc">跟随班级团队开展湖北省博物馆实地研学实践，走出校园感悟青年使命，将理论学习成果转化为实际行动。</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-card">
+                                <div class="timeline-title">武汉市运会送温暖服务</div>
+                                <div class="timeline-desc">作为青年志愿者为武汉市运动会提供送温暖服务，助力城市赛事。</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-card">
+                                <div class="timeline-title">校园文化公众号创作</div>
+                                <div class="timeline-desc">策划制作系列特长生宣传，以及各项赛事视频，用影像记录校园生活、传递青年态度，作品发布于学院公众号。</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-card">
+                                <div class="timeline-title">寒假"返家乡"社会实践</div>
+                                <div class="timeline-desc">寒假期间参与"返家乡"社会实践活动，服务扎实，获评优秀志愿者。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 艺术发展与作品 -->
+                <div class="section-wrap">
+                    <div class="section-title">
+                        <div class="title-deco"></div>
+                        <span class="title-cn">艺术发展与作品</span>
+                        <span class="title-en">ART & WORKS</span>
+                    </div>
+                    <div class="art-card">
+                        <div class="art-title">校园文化公众号创作</div>
+                        <div class="art-desc">策划并带领完成系列特长生宣传，用影像记录校园生活、传递青年态度，展现校园文化活力。从导演、拍摄到剪辑、公众号发表全流程主导。</div>
+                        <div class="art-tag">作品发布于学院公众号</div>
+                    </div>
+                    <div class="art-card">
+                        <div class="art-title">舞台艺术与语言表达</div>
+                        <div class="art-desc">拥有唱歌、跳舞、字画、剧情编导等兴趣特长，参与过英语演讲、话剧展演等赛事，舞台表现力突出，可承担节目策划、主持串联与现场组织。</div>
+                        <div class="art-tag">英语口语 / 话剧展演 </div>
+                    </div>
+                </div>
+
+                <!-- 青春寄语 -->
+                <div class="quote-card">
+                    <div class="quote-title">青春寄语</div>
+                    <div class="quote-text">
+不甘囿于既定答案，不困于固有框架。以思辨叩问前路，以实践验证构想。保持思维的锋芒，接纳试错与变数，在探索与突破中，把奇思变成现实，让青春在大胆求索中熠熠生辉。
+                    </div>
+                    <div class="quote-author">李美灵 · 武汉商学院 人工智能与大数据学院 · 2025级软件工程</div>
+                </div>
+                <div class="bottom-space"></div>
+            </div>
+
+
+            <!--面板2：技能能力（你可以在这里继续补充你的内容） -->
+            <div class="tab-panel" id="tab2">
+                <h2 style="margin: 20px 0 10px;">技能能力</h2>
+                <div class="section-wrap skill-page">
+    <!-- 顶部总介绍卡片 -->
+    <div class="skill-banner-card">
+        <div class="banner-tag">★ 技能能力与特长</div>
+        <h2>技能能力</h2>
+        <p>李美灵的综合工作能力、宣传与新媒体能力及兴趣特长。点击任意技能卡片，进入详情页查看能力要点、相关实践、活动图片与视频展示区。</p>
+        <div class="skill-stat-row">
+            <div class="stat-item"><span class="num">21</span><span class="text">项技能能力</span></div>
+            <div class="stat-item"><span class="num">6</span><span class="text">综合工作能力</span></div>
+            <div class="stat-item"><span class="num">7</span><span class="text">宣传新媒体</span></div>
+            <div class="stat-item"><span class="num">8</span><span class="text">兴趣特长</span></div>
+        </div>
+    </div>
+
+    <!-- 技能列表主页 默认显示 -->
+    <div id="skill-list-view" class="skill-list-wrap">
+        <div class="list-header">
+            <h2>全部技能 <small>ALL SKILLS</small></h2>
+            <span class="tip-tag">点击查看详情</span>
+        </div>
+
+        <!-- 🔴综合工作能力 -->
+        <div class="skill-group">
+            <h3 class="group-title red">● 综合工作能力 <span>(共 6 项)</span></h3>
+            <div class="skill-card" data-skill="organize">
+                <div class="card-icon red">⚙️</div>
+                <div class="card-content">
+                    <h4>组织协调</h4>
+                    <p>统筹班级与团支部建设，协调同学关系、落实集体任务。</p>
+                    <span class="level-tag tag-red">突出</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="plan">
+                <div class="card-icon red">📋</div>
+                <div class="card-content">
+                    <h4>统筹策划</h4>
+                    <p>活动策划书撰写、人员分工与流程统筹。</p>
+                    <span class="level-tag tag-red">突出</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="communicate">
+                <div class="card-icon red">📢</div>
+                <div class="card-content">
+                    <h4>沟通执行</h4>
+                    <p>信息通知、意见收集、任务推进，高效到位。</p>
+                    <span class="level-tag tag-red">突出</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="emergency">
+                <div class="card-icon red">⚡</div>
+                <div class="card-content">
+                    <h4>应急应变</h4>
+                    <p>从容应对突发情况，沉稳果断、随机应变。</p>
+                    <span class="level-tag tag-red">扎实</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="speech">
+                <div class="card-icon red">🎤</div>
+                <div class="card-content">
+                    <h4>语言表达</h4>
+                    <p>演讲、宣讲、主持串联，表达生动深入人心。</p>
+                    <span class="level-tag tag-red">突出</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="logic">
+                <div class="card-icon red">🧠</div>
+                <div class="card-content">
+                    <h4>逻辑思维</h4>
+                    <p>严密逻辑性，精准定位根本问题，规划最优方案。</p>
+                    <span class="level-tag tag-red">强</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🟡宣传与新媒体能力 -->
+        <div class="skill-group">
+            <h3 class="group-title gold">● 宣传与新媒体能力 <span>(共 7 项)</span></h3>
+            <div class="skill-card" data-skill="text-edit">
+                <div class="card-icon gold">✍️</div>
+                <div class="card-content">
+                    <h4>文字编辑</h4>
+                    <p>官方文字编辑、新闻信息、活动预告与成果展示文案。</p>
+                    <span class="level-tag tag-gold">熟练</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="text-write">
+                <div class="card-icon gold">📝</div>
+                <div class="card-content">
+                    <h4>文本撰写</h4>
+                    <p>文本创作与活动策划文案撰写。</p>
+                    <span class="level-tag tag-gold">擅长</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="photo">
+                <div class="card-icon gold">📷</div>
+                <div class="card-content">
+                    <h4>摄影摄像</h4>
+                    <p>活动现场记录、图片归档与影像素材采集。</p>
+                    <span class="level-tag tag-gold">熟练</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="direct">
+                <div class="card-icon gold">🎬</div>
+                <div class="card-content">
+                    <h4>导演拍摄</h4>
+                    <p>微视频导演与拍摄，情节设计连贯。</p>
+                    <span class="level-tag tag-gold">擅长</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="mp">
+                <div class="card-icon gold">📱</div>
+                <div class="card-content">
+                    <h4>公众号运营</h4>
+                    <p>公众号内容策划、排版制作与发布维护。</p>
+                    <span class="level-tag tag-gold">熟练</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="ppt">
+                <div class="card-icon gold">📊</div>
+                <div class="card-content">
+                    <h4>PPT 制作</h4>
+                    <p>汇报、宣讲与活动 PPT 视觉设计。</p>
+                    <span class="level-tag tag-gold">熟练</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🟣兴趣特长 -->
+        <div class="skill-group">
+            <h3 class="group-title purple">● 兴趣特长 <span>(共 8 项)</span></h3>
+            <div class="skill-card" data-skill="sing">
+                <div class="card-icon purple">🎵</div>
+                <div class="card-content">
+                    <h4>唱歌</h4>
+                    <p>可参与节目策划与现场演出。</p>
+                    <span class="level-tag tag-purple">兴趣</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="dance">
+                <div class="card-icon purple">💃</div>
+                <div class="card-content">
+                    <h4>跳舞</h4>
+                    <p>可参与文艺活动编排与表演。</p>
+                    <span class="level-tag tag-purple">兴趣</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="calligraphy">
+                <div class="card-icon purple">🖌️</div>
+                <div class="card-content">
+                    <h4>书法</h4>
+                    <p>可组织书法体验与文化交流活动。</p>
+                    <span class="level-tag tag-purple">兴趣</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="pub-speech">
+                <div class="card-icon purple">🗣️</div>
+                <div class="card-content">
+                    <h4>演讲</h4>
+                    <p>可承担主持串联与主题宣讲。</p>
+                    <span class="level-tag tag-purple">兴趣</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="drama">
+                <div class="card-icon purple">🎭</div>
+                <div class="card-content">
+                    <h4>剧情编导</h4>
+                    <p>可策划节目结构与情景剧编排。</p>
+                    <span class="level-tag tag-purple">兴趣</span>
+                </div>
+            </div>
+            <div class="skill-card" data-skill="activity-plan">
+                <div class="card-icon purple">🎉</div>
+                <div class="card-content">
+                    <h4>活动策划</h4>
+                    <p>主题、对象、分工、流程一体化设计。</p>
+                    <span class="level-tag tag-purple">突出</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 技能详情页面 默认隐藏，点击卡片后显示 -->
+    <div id="skill-detail-view" class="skill-detail-wrap" style="display:none;">
+        <div class="back-btn">← 返回全部技能</div>
+        <div class="detail-inner">
+            <div class="detail-icon">⚙️</div>
+            <div class="detail-row">
+                <label>能力分类</label>
+                <div id="detail-category"></div>
+            </div>
+            <div class="detail-row">
+                <label>能力等级</label>
+                <div id="detail-level"></div>
+            </div>
+            <div class="detail-row">
+                <label>能力描述</label>
+                <div id="detail-desc"></div>
+            </div>
+
+            <h3 class="detail-title">能力要点</h3>
+            <div class="point-list" id="detail-points"></div>
+
+            <h3 class="detail-title">相关内容与作品展示</h3>
+            <div class="practice-img-box" id="detail-images"></div>
+        </div>
+    </div>
+</div>
+                <!-- 青春寄语 -->
+                <div class="quote-card">
+                    <div class="quote-title">青春寄语</div>
+                    <div class="quote-text">
+不甘囿于既定答案，不困于固有框架。以思辨叩问前路，以实践验证构想。保持思维的锋芒，接纳试错与变数，在探索与突破中，把奇思变成现实，让青春在大胆求索中熠熠生辉。
+                    </div>
+                    <div class="quote-author">李美灵 · 武汉商学院 人工智能与大数据学院 · 2025级软件工程</div>
+                </div>
+                <div class="bottom-space"></div>
+            </div>
+
+
+            <!--面板3：竞赛荣誉 -->
+            <div class="tab-panel" id="tab3">
+                <div class="award-count-card">
+                    <h2>竞赛荣誉</h2>
+                    <p>李美灵在校期间获得的各类竞赛奖项、集体荣誉与个人荣誉。点击任意奖项卡片，进入详情页查看对应奖状证书与获奖信息。</p>
+                    <div class="count-row">
+                        <div>
+                            <div class="count-num">6</div>
+                            <span>项竞赛/荣誉</span>
+                        </div>
+                        <div>
+                            <div class="count-num">2</div>
+                            <span>项集体荣誉</span>
+                        </div>
+                        <div>
+                            <div class="count-num">4</div>
+                            <span>项个人荣誉</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>全部奖项</h2>
+
+                <!-- 奖项卡片1 优秀班集体 【点击查看证书弹窗】 -->
+                <div class="award-card">
+                    <span class="card-tag tag-collective">★ 集体荣誉</span>
+                    <h3>"优秀班集体"</h3>
+                    <div class="award-subtitle">2025—2026 学年度</div>
+                    <div class="award-desc">
+                        担任班长兼团支书，带领2025级建筑环境与能源应用工程班级在机电工程学院2025‑2026学年度表现优异。
+                    </div>
+                    <div class="view-cert" data-cert="cert1">查看证书详情 →</div>
+                </div>
+
+                <!-- 奖项卡片2 杰出防艾志愿服务集体 -->
+                <div class="award-card">
+                    <span class="card-tag tag-collective">★ 集体荣誉</span>
+                    <h3>杰出防艾志愿服务集体</h3>
+                    <div class="award-subtitle">校青年志愿者协会</div>
+                    <div class="award-desc">
+                        所在校青年志愿者协会集体获评"杰出防艾志愿服务集体"，参与防艾宣传与志愿服务工作。
+                    </div>
+                    <div class="view-cert" data-cert="cert2">查看证书详情 →</div>
+                </div>
+
+                <!--奖项卡片3 公益达人-->
+                <div class="award-card">
+                    <span class="card-tag tag-person">★ 个人荣誉</span>
+                    <h3>"公益达人"</h3>
+                    <div class="award-subtitle">校园志愿服务评选</div>
+                    <div class="award-desc">
+                        积极参与多项志愿服务活动，热心公益事业，表现突出，获评“公益达人”荣誉称号。
+                    </div>
+                    <div class="view-cert" data-cert="cert3">查看证书详情 →</div>
+                </div>
+
+                <!--奖项卡片4 普通话二甲证书-->
+                <div class="award-card">
+                    <span class="card-tag tag-person">★ 个人荣誉</span>
+                    <h3>普通话二级甲等证书</h3>
+                    <div class="award-subtitle">国家语言文字水平测试</div>
+                    <div class="award-desc">
+                        通过全国普通话水平测试，取得二级甲等证书。
+                    </div>
+                    <div class="view-cert" data-cert="cert4">查看证书详情 →</div>
+                </div>
+
+                <!--奖项卡片5 第九次学生代表大会代表人-->
+                <div class="award-card">
+                    <span class="card-tag tag-person">★ 个人荣誉</span>
+                    <h3>第九次学生代表大会代表人</h3>
+                    <div class="award-subtitle">武汉商学院学代会</div>
+                    <div class="award-desc">
+                        当选学校第九次学生代表大会学生代表，代表班级同学参与学生代表大会，履行代表职责。
+                    </div>
+                    <div class="view-cert" data-cert="cert5">查看证书详情 →</div>
+                </div>
+
+                <!--奖项卡片6 英语口语合格证书-->
+                <div class="award-card">
+                    <span class="card-tag tag-person">★ 个人荣誉</span>
+                    <h3>英语口语合格证书</h3>
+                    <div class="award-subtitle">校级英语能力考核</div>
+                    <div class="award-desc">
+                        通过学校英语口语能力考核，获得英语口语合格证书。
+                    </div>
+                    <div class="view-cert" data-cert="cert6">查看证书详情 →</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--证书弹窗组件 -->
+    <div class="cert-modal" id="certModal">
+        <div class="modal-inner">
+            <h3>荣誉详情</h3>
+            <div id="modalText"></div>
+            <img id="modalImg" src="" alt="证书">
+            <br>
+            <button class="close-btn" onclick="closeModal()">关闭</button>
+        </div>
+    </div>
+
+
+    <script>
+        //=====1. 标签页切换逻辑=====
+        const tabBtns = document.querySelectorAll('.tab-item');
+        const panels = document.querySelectorAll('.tab-panel');
+        tabBtns.forEach(btn=>{
+            btn.addEventListener('click',function(){
+                //清除全部激活
+                tabBtns.forEach(b=>b.classList.remove('active'));
+                panels.forEach(p=>p.classList.remove('show'));
+                //当前激活
+                this.classList.add('active');
+                let targetId = this.getAttribute('data-tab');
+                document.getElementById(targetId).classList.add('show');
+            })
+        })
+
+        //=====2. 弹窗详情文本数据=====
+        const certMap = {
+            "cert1":{
+                text:`
+                <div class="info-row">
+                    <div class="info-label">颁发机构</div>
+                    <div class="info-value">共青团武汉商学院机电工程学院委员会</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖时间</div>
+                    <div class="info-value">2025年10月</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">奖项类别</div>
+                    <div class="info-value">班级建设 · 集体荣誉</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖等级</div>
+                    <div class="info-value">集体荣誉</div>
+                </div>
+                <div class="desc-block">
+                    担任班长兼团支书，带领2025级建筑环境与能源应用工程班级在机电工程学院2025‑2026学年度班级建设与管理工作中表现优异，被评为"优秀班集体"。凝聚同学、落实任务，班级与团支部建设成效显著。
+                </div>
+                `,
+                img:"./images/cert1.jpg"
+            },
+            "cert2":{
+                text:`
+                <div class="info-row">
+                    <div class="info-label">颁发机构</div>
+                    <div class="info-value">武汉商学院青年志愿者协会</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖时间</div>
+                    <div class="info-value">2025年11月</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">奖项类别</div>
+                    <div class="info-value">志愿服务 · 集体荣誉</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖等级</div>
+                    <div class="info-value">集体荣誉</div>
+                </div>
+                <div class="desc-block">
+                    所在校青年志愿者协会集体获评"杰出防艾志愿服务集体"，积极参与防艾科普宣传、校园志愿服务等工作。
+                </div>
+                `,
+                img:"./images/cert2.jpg"
+            },
+            "cert3":{
+                text:`
+                <div class="info-row">
+                    <div class="info-label">颁发机构</div>
+                    <div class="info-value">武汉商学院校团委</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖时间</div>
+                    <div class="info-value">2026年3月</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">奖项类别</div>
+                    <div class="info-value">志愿服务 · 个人荣誉</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖等级</div>
+                    <div class="info-value">个人荣誉</div>
+                </div>
+                <div class="desc-block">
+                    在校期间积极投身各类公益志愿活动，服务时长充足、工作认真负责，获评校园“公益达人”荣誉称号。
+                </div>
+                `,
+                img:"./images/cert3.jpg"
+            },
+            "cert4":{
+                text:`
+                <div class="info-row">
+                    <div class="info-label">颁发机构</div>
+                    <div class="info-value">国家语言文字工作委员会</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖时间</div>
+                    <div class="info-value">2025年12月</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">奖项类别</div>
+                    <div class="info-value">语言能力 · 个人荣誉</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖等级</div>
+                    <div class="info-value">二级甲等</div>
+                </div>
+                <div class="desc-block">
+                    参加全国普通话水平测试，成绩达到二级甲等标准，获得普通话二级甲等证书。
+                </div>
+                `,
+                img:"./images/cert4.jpg"
+            },
+            "cert5":{
+                text:`
+                <div class="info-row">
+                    <div class="info-label">颁发机构</div>
+                    <div class="info-value">武汉商学院学生会</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖时间</div>
+                    <div class="info-value">2025年10月</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">奖项类别</div>
+                    <div class="info-value">学生工作 · 个人荣誉</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖等级</div>
+                    <div class="info-value">学生代表</div>
+                </div>
+                <div class="desc-block">
+                    当选武汉商学院第九次学生代表大会学生代表，代表本班同学参加学代会，建言献策，履行学生代表义务。
+                </div>
+                `,
+                img:"./images/cert5.jpg"
+            },
+            "cert6":{
+                text:`
+                <div class="info-row">
+                    <div class="info-label">颁发机构</div>
+                    <div class="info-value">武汉商学院外国语学院</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖时间</div>
+                    <div class="info-value">2025年4月</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">奖项类别</div>
+                    <div class="info-value">外语能力 · 个人荣誉</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">获奖等级</div>
+                    <div class="info-value">合格</div>
+                </div>
+                <div class="desc-block">
+                    通过学校英语口语能力考核，口语表达达标，取得英语口语合格证书。
+                </div>
+                `,
+                img:"./images/cert6.jpg"
+            },
+        }
+
+        //点击查看详情
+        document.querySelectorAll('.view-cert').forEach(item=>{
+            item.addEventListener('click',function(){
+                let key = this.getAttribute('data-cert');
+                let data = certMap[key];
+                document.getElementById("modalText").innerHTML = data.text;
+                document.getElementById("modalImg").src = data.img;
+                document.getElementById("certModal").classList.add('show');
+            })
+        })
+
+        //关闭弹窗
+        function closeModal(){
+            document.getElementById("certModal").classList.remove('show');
+        }
+        
+// 所有技能详情数据源，【组织协调】已经填入你截图里的现成内容
+const skillData = {
+    "organize":{
+        icon:"⚙️",
+        iconBg:"#b41c30",
+        category:"综合工作能力",
+        level:"突出",
+        desc:"相关实践：担任班长兼团支书，带领班级获评\"优秀班集体\"。",
+        points:[
+            "班级与团支部日常建设统筹",
+            "协调不同性格同学关系",
+            "落实集体任务分工到人"
+        ],
+        images:[
+            "images/skill/organize_1.jpg",
+            "images/skill/organize_2.jpg",
+            "images/skill/organize_3.jpg",,
+            "images/skill/organize_4.jpg"
+        ]
+    },
+    "plan":{
+        icon:"📋",
+        iconBg:"#b41c30",
+        category:"综合工作能力",
+        level:"突出",
+        desc:"活动策划书撰写、人员分工与流程统筹，负责多项班级、志愿活动整体规划。",
+        points:[
+            "完整活动策划方案撰写",
+            "活动人员分工安排",
+            "全流程时间节点把控"
+        ],
+        images:[]
+    },
+    "communicate":{
+        icon:"📢",
+        iconBg:"#b41c30",
+        category:"综合工作能力",
+        level:"突出",
+        desc:"信息通知、意见收集、任务推进，高效到位，搭建同学与老师沟通桥梁。",
+        points:[
+            "双向信息传递通知",
+            "班级同学意见收集反馈",
+            "跟进任务落地执行进度"
+        ],
+        images:[]
+    },
+    "emergency":{
+        icon:"⚡",
+        iconBg:"#b41c30",
+        category:"综合工作能力",
+        level:"扎实",
+        desc:"从容应对突发情况，沉稳果断、随机应变，妥善处理活动现场临时问题。",
+        points:[
+            "活动突发状况快速响应",
+            "现场问题灵活调整方案",
+            "稳定现场秩序情绪疏导"
+        ],
+        images:[]
+    },
+    "speech":{
+        icon:"🎤",
+        iconBg:"#b41c30",
+        category:"综合工作能力",
+        level:"突出",
+        desc:"演讲、宣讲、主持串联，表达生动深入人心，多次承担班级主题宣讲任务。",
+        points:[
+            "演讲稿内容撰写打磨",
+            "线下宣讲主持串联",
+            "语言表达感染力把控"
+        ],
+        images:[]
+    },
+    "logic":{
+        icon:"🧠",
+        iconBg:"#b41c30",
+        category:"综合工作能力",
+        level:"强",
+        desc:"严密逻辑性，精准定位根本问题，规划最优方案。",
+        points:[
+            "事件问题根源分析",
+            "多方案对比择优选择",
+            "任务流程条理化规划"
+        ],
+        images:[]
+    },
+    "text-edit":{
+        icon:"✍️",
+        iconBg:"#d4aa28",
+        category:"宣传与新媒体能力",
+        level:"熟练",
+        desc:"官方文字编辑、新闻信息、活动预告与成果展示文案。",
+        points:[
+            "活动新闻稿件撰写",
+            "推文文案校对润色",
+            "成果宣传文稿创作"
+        ],
+        images:[]
+    },
+    "text-write":{
+        icon:"📝",
+        iconBg:"#d4aa28",
+        category:"宣传与新媒体能力",
+        level:"擅长",
+        desc:"文本创作与活动策划文案撰写。",
+        points:[
+            "原创活动文稿创作",
+            "策划书文字内容编写",
+            "文艺宣传稿件打磨"
+        ],
+        images:[]
+    },
+    "photo":{
+        icon:"📷",
+        iconBg:"#d4aa28",
+        category:"宣传与新媒体能力",
+        level:"熟练",
+        desc:"活动现场记录、图片归档与影像素材采集。",
+        points:[
+            "活动现场抓拍取景",
+            "影像素材后期筛选归档",
+            "宣传配图素材采集"
+        ],
+        images:[]
+    },
+    "direct":{
+        icon:"🎬",
+        iconBg:"#d4aa28",
+        category:"宣传与新媒体能力",
+        level:"擅长",
+        desc:"微视频导演与拍摄，情节设计连贯。",
+        points:[
+            "短视频脚本策划编写",
+            "拍摄现场调度指导",
+            "视频故事情节设计"
+        ],
+        images:[]
+    },
+    "mp":{
+        icon:"📱",
+        iconBg:"#d4aa28",
+        category:"宣传与新媒体能力",
+        level:"熟练",
+        desc:"公众号内容策划、排版制作与发布维护。<br>相关实践：作品发布于机电工程学院公众号。",
+        points:[
+            "内容策划选题",
+            "排版制作美观",
+            "发布维护及时"
+        ],
+        images:[
+            "images/skill/gzh_1.jpg"
+        ]
+    },
+    "ppt":{
+        icon:"📊",
+        iconBg:"#d4aa28",
+        category:"宣传与新媒体能力",
+        level:"熟练",
+        desc:"汇报、宣讲与活动 PPT 视觉设计。",
+        points:[
+            "PPT页面版式设计",
+            "汇报图文素材排版",
+            "宣讲演示文稿制作"
+        ],
+        images:[]
+    },
+    "sing":{
+        icon:"🎵",
+        iconBg:"#8039a8",
+        category:"兴趣特长",
+        level:"兴趣",
+        desc:"可参与节目策划与现场演出。",
+        points:[
+            "文艺晚会歌唱表演",
+            "节目曲目筛选编排",
+            "舞台现场节目演出"
+        ],
+        images:[]
+    },
+    "dance":{
+        icon:"💃",
+        iconBg:"#8039a8",
+        category:"兴趣特长",
+        level:"兴趣",
+        desc:"可参与文艺活动编排与表演。",
+        points:[
+            "舞蹈节目动作编排",
+            "文艺汇演舞台表演",
+            "团体舞蹈队形设计"
+        ],
+        images:[]
+    },
+    "calligraphy":{
+        icon:"🖌️",
+        iconBg:"#8039a8",
+        category:"兴趣特长",
+        level:"兴趣",
+        desc:"可组织书法体验与文化交流活动。",
+        points:[
+            "书法作品练习创作",
+            "书法文化活动组织",
+            "传统文化交流分享"
+        ],
+        images:[]
+    },
+    "pub-speech":{
+        icon:"🗣️",
+        iconBg:"#8039a8",
+        category:"兴趣特长",
+        level:"兴趣",
+        desc:"可承担主持串联与主题宣讲。",
+        points:[
+            "活动主持稿撰写",
+            "晚会现场串联主持",
+            "主题宣讲内容分享"
+        ],
+        images:[]
+    },
+    "drama":{
+        icon:"🎭",
+        iconBg:"#8039a8",
+        category:"兴趣特长",
+        level:"兴趣",
+        desc:"可策划节目结构与情景剧编排。",
+        points:[
+            "情景剧剧本编写",
+            "舞台节目流程策划",
+            "演员角色排练指导"
+        ],
+        images:[]
+    },
+    "activity-plan":{
+        icon:"🎉",
+        iconBg:"#8039a8",
+        category:"兴趣特长",
+        level:"突出",
+        desc:"主题、对象、分工、流程一体化设计。",
+        points:[
+            "活动主题创意构思",
+            "参与人员任务分工",
+            "完整活动流程设计"
+        ],
+        images:[]
+    }
+}
+
+const skillList = document.getElementById('skill-list-view');
+const skillDetail = document.getElementById('skill-detail-view');
+const backBtn = document.querySelector('.back-btn');
+const detailIcon = document.querySelector('.detail-icon');
+const detailCategory = document.getElementById('detail-category');
+const detailLevel = document.getElementById('detail-level');
+const detailDesc = document.getElementById('detail-desc');
+const detailPoints = document.getElementById('detail-points');
+const detailImages = document.getElementById('detail-images');
+
+//点击卡片进入详情，加载对应内容
+document.querySelectorAll('.skill-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+        let skillKey = card.getAttribute("data-skill");
+        let data = skillData[skillKey];
+
+        //填充图标
+        detailIcon.innerText = data.icon;
+        detailIcon.style.background = data.iconBg;
+        detailIcon.style.color = "#fff";
+
+        //填充文字内容
+        detailCategory.innerText = data.category;
+        detailLevel.innerText = data.level;
+        detailDesc.innerHTML = data.desc;
+
+        //渲染能力要点
+        detailPoints.innerHTML = "";
+        data.points.forEach(item=>{
+            detailPoints.innerHTML += `<div class="point-item">● ${item}</div>`;
+        })
+
+        //渲染四宫格图片
+        detailImages.innerHTML = "";
+        data.images.forEach(imgSrc=>{
+            detailImages.innerHTML += `<img src="${imgSrc}" alt="实践图片">`;
+        })
+
+        skillList.style.display = 'none';
+        skillDetail.style.display = 'block';
+        window.scrollTo(0,0);
+    })
+})
+//返回列表
+backBtn.addEventListener('click',()=>{
+    skillDetail.style.display = 'none';
+    skillList.style.display = 'block';
+})
+</script>
+    </script>
+</body>
+</html>
